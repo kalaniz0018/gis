@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Display a map</title>
+    <meta property="og:description" content="Initialize a map in an HTML element with MapLibre GL JS." />
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.2.0/dist/maplibre-gl.css' />
+    <script src='https://unpkg.com/maplibre-gl@4.2.0/dist/maplibre-gl.js'></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        const map = new maplibregl.Map({
+            container: 'map', // container id
+            style: './zt.json', // style URL
+            center: [-58.4173, -34.6118], // starting position [lng, lat]
+            zoom: 10, // starting zoom
+            maplibreLogo: true
+        });
+
+        map.on('load', () => {
+            // COSTUMERS
+            map.addSource('nc_spatial_points', {
+                "type": "vector",
+                "url": "http://martin-pruebas-gis.ossokdmq.telecentro.net.ar/nc_spatial_points"
+            });
+            map.addLayer({
+                id: 'costumers',
+                type: 'circle',
+                source: 'nc_spatial_points',
+                'source-layer': 'nc_spatial_points',
+                'layout': {},
+                'paint': {
+                    'circle-color': '#A44A20', // Código hexadecimal para el color rosa
+                    //'circle-radius': 6,  ajustar el radio del círculo según prefieras
+                },
+                'minzoom': 16,
+                'filter': ['==', 'object_type_id', '4063055943013004400']
+            })
+            // VIVIENDAS
+            map.addSource('viviendas_normalizadas', {
+                type: 'vector',
+                url: 'http://martin-pruebas-gis.ossokdmq.telecentro.net.ar/viviendas_normalizadas',
+            })
+
+            map.addLayer({
+                id: 'viviendas',
+                type: 'circle',
+                source: 'viviendas_normalizadas',
+                "source-layer": 'viviendas_normalizadas',
+                'layout': {},
+                'paint': {
+                    'circle-color': '#38A149', // Código hexadecimal para el color rosa
+                    //'circle-radius': 6,  ajustar el radio del círculo según prefieras
+                },
+                filter: ["==", "dwgentity", "viv"],
+                minzoom: 13,
+                // maxzoom: 23,
+
+            })
+            // LOTES
+            map.addSource("catastro", {
+                type: "vector",
+                url: "http://martin-pruebas-gis.ossokdmq.telecentro.net.ar/catastro",
+            });
+
+            map.addLayer({
+                id: "LOTES",
+                type: "line",
+                source: "catastro",
+                "source-layer": "catastro",
+                paint: { "line-color": "green", "line-width": 1 },
+                filter: ["in", "dwglayer", "21_MA_LOTE_LIN", "21_MA_LOTE_LINEA"],
+                minzoom: 13,
+            });
+
+            // ZONAS TECNICAS NORMALIZADAS TRAZO AL REDEDOR
+            map.addSource("zonas_tecnicas_normalizadas", {
+                type: "vector",
+                url: "http://martin-pruebas-gis.ossokdmq.telecentro.net.ar/zonas_tecnicas_normalizadas",
+            });
+
+            map.addLayer({
+                id: "zonas_tecnicas_normalizadas",
+                type: "line",
+                source: "zonas_tecnicas_normalizadas",
+                "source-layer": "zonas_tecnicas_normalizadas",
+                paint: { "line-color": "black", "line-width": 3 },
+                minzoom: 12,
+            });
+
+        })
+
+    </script>
+</body>
+
+</html>
