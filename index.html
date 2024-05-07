@@ -24,7 +24,10 @@
 
 <body>
     <div id="map"></div>
-    <script>
+    <script >
+        //import { controlLayer } from './controlLayers.js';
+
+
         const map = new maplibregl.Map({
             container: 'map', // container id
             style: './zt.json', // style URL
@@ -80,7 +83,7 @@
             });
 
             map.addLayer({
-                id: "LOTES",
+                id: "catastro",
                 type: "line",
                 source: "catastro",
                 "source-layer": "catastro",
@@ -103,6 +106,18 @@
                 paint: { "line-color": "black", "line-width": 3 },
                 minzoom: 12,
             });
+
+ /*            map.addControl(
+                new controlLayer({
+                    layers:[
+                        'costumers',
+                        'viviendas',
+                        'catastro',
+                        'zonas_tecnicas_normalizadas'
+
+                    ]
+                })
+            ) */
 
         })
 
