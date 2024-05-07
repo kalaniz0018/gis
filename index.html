@@ -26,7 +26,7 @@
     
     <div id="map"></div>
     <script type="module">
-        import { controlLayers } from './controlLayers.js';
+        import { ControlLayers } from './controlLayers.js';
 
 
         const map = new maplibregl.Map({
@@ -50,7 +50,7 @@
                 'source-layer': 'nc_spatial_points',
                 'layout': {},
                 'paint': {
-                    'circle-color': '#A44A20', // Código hexadecimal para el color rosa
+                    'circle-color': '#E2FC04', // AMARILLO Código hexadecimal para el color rosa
                     //'circle-radius': 6,  ajustar el radio del círculo según prefieras
                 },
                 'minzoom': 16,
@@ -69,7 +69,7 @@
                 "source-layer": 'viviendas_normalizadas',
                 'layout': {},
                 'paint': {
-                    'circle-color': '#38A149', // Código hexadecimal para el color rosa
+                    'circle-color': '#FC0F04', // ROJO Código hexadecimal para el color rosa
                     //'circle-radius': 6,  ajustar el radio del círculo según prefieras
                 },
                 filter: ["==", "dwgentity", "viv"],
@@ -109,7 +109,7 @@
             });
 
                         map.addControl(
-                           new controlLayers({
+                           new ControlLayers({
                                layers:[
                                    'costumers',
                                    'viviendas',
