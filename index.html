@@ -109,15 +109,17 @@
             });
 
                         map.addControl(
-                           new controlLayer({
+                           new controlLayers({
                                layers:[
                                    'costumers',
                                    'viviendas',
                                    'catastro',
-                                   'zonas_tecnicas_normalizadas'
+                                   'zonas_tecnicas_normalizadas',
+                                   'zonasTecnicas'
            
                                ]
-                           })
+                           }),
+                           "top-left"
                        ) 
 
 
