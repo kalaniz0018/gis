@@ -23,9 +23,10 @@
 </head>
 
 <body>
+    
     <div id="map"></div>
-    <script >
-        //import { controlLayer } from './controlLayers.js';
+    <script type="module">
+        import { controlLayers } from './controlLayers.js';
 
 
         const map = new maplibregl.Map({
@@ -107,19 +108,25 @@
                 minzoom: 12,
             });
 
- /*            map.addControl(
-                new controlLayer({
-                    layers:[
-                        'costumers',
-                        'viviendas',
-                        'catastro',
-                        'zonas_tecnicas_normalizadas'
+                        map.addControl(
+                           new controlLayer({
+                               layers:[
+                                   'costumers',
+                                   'viviendas',
+                                   'catastro',
+                                   'zonas_tecnicas_normalizadas'
+           
+                               ]
+                           })
+                       ) 
 
-                    ]
-                })
-            ) */
+
+
 
         })
+
+
+
 
     </script>
 </body>
