@@ -1,64 +1,50 @@
-class ControlLayers {
+
+class controlLayers {
     constructor(options) {
-        // Si no se proporciona un objeto de opciones, se establece como un objeto vacío con una propiedad "layers" inicializada como un array vacío.
+        //parámetro de entrada: es el nombre del parámetro que se espera recibir cuando se crea una instancia de controlLayer
         options = options || { layers: [] };
-        // Se asigna el array de capas desde las opciones proporcionadas.
-        this.layers = options.layers;
-        // Se inicializa un objeto para almacenar la visibilidad de las capas.
-        this.layerVisibility = {};
+        //atributo interno.: _layers es el nombre del atributo interno donde se almacenan las capas dentro de la instancia de controlLayer
+        this._layers = options.layers;
+        this._layerVisibility = {};
     }
 
-    // Método para agregar el control al mapa.
     onAdd(map) {
-        // Se guarda la referencia al mapa.
-        this.map = map;
-        // Se crea el contenedor principal del control.
-        this.container = document.createElement('div');
-        this.container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
-        this.container.style.padding = '8px';
-        this.container.style.fontSize = '14px';
-        this.container.style.position = 'absolute';
-        /* this.container.style.top = '10px';
-        this.container.style.left = '15px'; */
-        this.container.style.width = '210px';
+        this._map = map;
+        this._div = document.createElement('div');
+        this._div.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+        this._div.style.padding = '8px';
+        this._div.style.fontSize = '14px';
+        this._div.style.position = 'absolute';
+        this._div.style.top = '10px';
+        this._div.style.left = '10px';
+        this._div.style.width = '210px';
 
-        // Se obtienen las capas del estilo del mapa.
-        this.mapLayers = this.map.getStyle().layers;
-        // Se obtienen los identificadores de las capas del estilo del mapa.
-        this.mapLayerIds = this.mapLayers.map(layer => layer.id);
+        this._mapLayers = this._map.getStyle().layers;
+        this._mapLayerIds = this._mapLayers.map(layer => layer.id);
 
-        // Se itera sobre las capas proporcionadas al control.
-        this.layers.forEach(layer => {
-            // Si la capa está presente en el estilo del mapa.
-            if (this.mapLayerIds.includes(layer)) {
-                // Se establece la visibilidad de la capa como verdadera.
-                this.layerVisibility[layer] = true;
-                // Se crea el interruptor de capa y se agrega al contenedor.
-                const input = this._createLayerInputToggle(layer, true);
-                this.container.appendChild(input);
+        this._layers.forEach(layer => {
+            if (this._mapLayerIds.includes(layer)) {
+                const checked = true;
+                this._layerVisibility[layer] = true;
+                const input = this._createLayerInputToggle(layer, checked);
+                this._div.appendChild(input);
             }
         });
 
-        // Se retorna el contenedor del control.
-        return this.container;
+        return this._div;
     }
 
-    // Método para eliminar el control del mapa.
     onRemove() {
-        // Se elimina el contenedor del DOM.
-        this.container.parentNode.removeChild(this.container);
-        // Se limpia la referencia al mapa.
-        this.map = undefined;
+        this._div.parentNode.removeChild(this._div);
+        this._map = undefined;
     }
 
-    // Método privado para crear un interruptor de capa.
     _createLayerInputToggle(layer, checked) {
         const container = document.createElement('div');
         container.className = 'layer-toggle';
         const input = document.createElement('input');
         input.type = 'checkbox';
         input.checked = checked;
-        // Se añade un evento de cambio para manejar la visibilidad de la capa.
         input.addEventListener('change', () => {
             this._toggleLayerVisibility(layer, input.checked);
         });
@@ -69,38 +55,36 @@ class ControlLayers {
         return container;
     }
 
-    // Método privado para cambiar la visibilidad de una capa.
+
     _toggleLayerVisibility(layer, visible) {
-        // Se verifica si el mapa está definido.
-        if (!this.map) {
+        if (!this._map) {
             console.error('El mapa no está definido.');
             return;
         }
 
-        // Se obtiene el índice de la capa en el array de identificadores de capa del mapa.
-        const layerIndex = this.mapLayerIds.indexOf(layer);
+        const layerIndex = this._mapLayerIds.indexOf(layer);
 
-        // Si la capa está presente en el estilo del mapa.
         if (layerIndex !== -1) {
-            // Se obtiene el identificador de la capa.
-            const layerId = this.mapLayers[layerIndex].id;
-            // Si la capa está en el objeto de visibilidad de la capa.
-            if (this.layerVisibility.hasOwnProperty(layerId)) {
-                // Si la visibilidad de la capa ha cambiado.
-                if (this.layerVisibility[layerId] !== visible) {
-                    // Se actualiza la visibilidad de la capa en el mapa.
+            const layerId = this._mapLayers[layerIndex].id;
+            if (this._layerVisibility.hasOwnProperty(layerId)) {
+                if (this._layerVisibility[layerId] !== visible) {
                     const visibility = visible ? 'visible' : 'none';
-                    this.map.setLayoutProperty(layerId, 'visibility', visibility);
-                    // Se actualiza el estado de visibilidad en el objeto de visibilidad de la capa.
-                    this.layerVisibility[layerId] = visible;
+                    this._map.setLayoutProperty(layerId, 'visibility', visibility);
+                    this._layerVisibility[layerId] = visible;
                 }
             } else {
-                console.error(`La capa "${layerId}" no está en el objeto layerVisibility.`);
+                console.error(`La capa "${layerId}" no está en el objeto _layerVisibility.`);
             }
         } else {
             console.error(`La capa "${layer}" no se encuentra en el estilo del mapa.`);
         }
     }
+
+
+
+
+
 }
 
-export { ControlLayers };
+
+export { controlLayers };

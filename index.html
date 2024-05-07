@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.2.0/dist/maplibre-gl.css' />
     <script src='https://unpkg.com/maplibre-gl@4.2.0/dist/maplibre-gl.js'></script>
+
     <style>
         body {
             margin: 0;
@@ -23,11 +24,26 @@
 </head>
 
 <body>
-    
-    <div id="map"></div>
-    <script type="module">
-        import { ControlLayers } from './controlLayers.js';
 
+    <button onclick="prueba('LP861AF_rv08')">HighlightNodo</button>
+    <button onclick="prueba2('LP861AF_rv08')">UnHighlightNodo</button>
+
+    <div id="map"></div>
+
+    <!--     <script>
+        function prueba(nodo) {
+            let filter = map.getFilter("zonas_tecnicas_normalizadas-highlighted");
+            filter[2] = nodo;
+            map.setFilter("zonas_tecnicas_normalizadas-highlighted", filter);
+        }
+
+        function prueba2(nodo) {
+            let filter = map.getFilter("zonas_tecnicas_normalizadas-highlighted");
+            map.setFilter("zonas_tecnicas_normalizadas-highlighted", [filter[0], filter[1], '']);
+        }
+    </script> -->
+    <script type="module">
+        import { controlLayers } from './controlLayers.js';
 
         const map = new maplibregl.Map({
             container: 'map', // container id
@@ -69,7 +85,7 @@
                 "source-layer": 'viviendas_normalizadas',
                 'layout': {},
                 'paint': {
-                    'circle-color': '#FC0F04', // ROJO Código hexadecimal para el color rosa
+                    'circle-color': '#FC0F04', // rOJO Código hexadecimal para el color rosa
                     //'circle-radius': 6,  ajustar el radio del círculo según prefieras
                 },
                 filter: ["==", "dwgentity", "viv"],
@@ -108,29 +124,84 @@
                 minzoom: 12,
             });
 
-                        map.addControl(
-                           new ControlLayers({
-                               layers:[
-                                   'costumers',
-                                   'viviendas',
-                                   'catastro',
-                                   'zonas_tecnicas_normalizadas',
-                                   'zonasTecnicas'
-           
-                               ]
-                           }),
-                           "top-left"
-                       ) 
+            map.addControl(
+                new controlLayers({
+                    layers: [
+                        'costumers',
+                        'viviendas',
+                        'catastro',
+                        'zonas_tecnicas_normalizadas',
+                        'zonasTecnicas'
+
+                    ]
+                }),
+                "top-left"
+            )
 
 
+            HIGHLIGHT_COLOR = "#F4C91C"
+            HIGHLIGHT_OPACITY = 0.5
+            HIGHLIGHT_WIDTH = 10
+
+
+            addLayer(
+                map,
+                `zonas_tecnicas_normalizadas-highlighted`,
+                'line',
+                "zonas_tecnicas_normalizadas",
+                ['in', 'dwgfilename', ''],
+                {},
+                {
+                    'line-color': HIGHLIGHT_COLOR,
+                    'line-opacity': HIGHLIGHT_OPACITY,
+                    'line-width': HIGHLIGHT_WIDTH,
+                },
+                null
+            )
+
+
+
+            function addLayer(map, id, type, source, filter = [], layout = {}, paint = {}, primaryLayer = null, visibility = 'visible') {
+                let layer = {
+                    'id': id,
+                    'type': type,
+                    'source': source,
+                    'source-layer': source,
+                    'layout': {
+                        ...layout
+                    },
+                    'paint': paint
+                };
+
+                layer.layout.visibility = visibility;
+
+                if (filter.length > 0)
+                    layer.filter = filter
+
+                if (primaryLayer != null)
+                    map.addLayer(layer, primaryLayer)
+                else
+                    map.addLayer(layer)
+            }
 
 
         })
 
+        function prueba(nodo) {
+            let filter = map.getFilter("zonas_tecnicas_normalizadas-highlighted");
+            filter[2] = nodo
+            map.setFilter("zonas_tecnicas_normalizadas-highlighted", filter);
+        }
+
+        function prueba2(nodo) {
+            let filter = map.getFilter("zonas_tecnicas_normalizadas-highlighted");
+            map.setFilter("zonas_tecnicas_normalizadas-highlighted", [filter[0], filter[1], '']);
+        }
 
 
 
     </script>
+    <!--   -->
 </body>
 
 </html>
