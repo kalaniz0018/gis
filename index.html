@@ -22,9 +22,12 @@
         }
     </style>
 </head>
+<script>
+
+</script>
 
 <body>
-
+   
     <button onclick="prueba('LP861AF_rv08')">HighlightNodo</button>
     <button onclick="prueba2('LP861AF_rv08')">UnHighlightNodo</button>
 
@@ -42,9 +45,9 @@
             map.setFilter("zonas_tecnicas_normalizadas-highlighted", [filter[0], filter[1], '']);
         }
     </script> -->
-    <script type="module">
-        import { controlLayers } from './controlLayers.js';
-
+    <!-- <script > -->
+     <script type="module"> 
+         import { controlLayers } from './controlLayers.js';  
         const map = new maplibregl.Map({
             container: 'map', // container id
             style: './zt.json', // style URL
@@ -124,7 +127,7 @@
                 minzoom: 12,
             });
 
-            map.addControl(
+             map.addControl(
                 new controlLayers({
                     layers: [
                         'costumers',
@@ -136,8 +139,8 @@
                     ]
                 }),
                 "top-left"
-            )
-
+            ) 
+ /*  */
 
             HIGHLIGHT_COLOR = "#F4C91C"
             HIGHLIGHT_OPACITY = 0.5
@@ -184,9 +187,10 @@
                     map.addLayer(layer)
             }
 
-
+        
         })
 
+        
         function prueba(nodo) {
             let filter = map.getFilter("zonas_tecnicas_normalizadas-highlighted");
             filter[2] = nodo
@@ -201,6 +205,7 @@
 
 
     </script>
+
     <!--   -->
 </body>
 
